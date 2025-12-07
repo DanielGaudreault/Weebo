@@ -3,363 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Weebo - Build Your Flubber AI Assistant</title>
+    <title>Weebo - Your Web-Based AI Assistant</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
     <style>
         :root {
-            --primary: #00d9ff;
-            --secondary: #ff00d0;
-            --dark: #0a192f;
-            --light: #ccd6f6;
-            --accent: #00ff9d;
-            --card-bg: rgba(17, 34, 64, 0.7);
-            --hologram-blue: rgba(0, 217, 255, 0.15);
+            --weebo-blue: #00c3ff;
+            --weebo-pink: #ff00cc;
+            --dark-bg: #0a0e17;
+            --card-bg: rgba(16, 21, 34, 0.8);
+            --hologram-glow: rgba(0, 195, 255, 0.2);
+            --text-light: #e0f7ff;
         }
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background-color: var(--dark);
-            color: var(--light);
+            font-family: 'Courier New', monospace;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            min-height: 100vh;
             overflow-x: hidden;
-            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(0, 195, 255, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 80% 70%, rgba(255, 0, 204, 0.05) 0%, transparent 20%);
         }
         
-        /* Header & Navigation */
-        header {
+        /* Floating Particles Background */
+        .particles {
             position: fixed;
             top: 0;
+            left: 0;
             width: 100%;
-            padding: 20px 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(10, 25, 47, 0.9);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            border-bottom: 1px solid var(--hologram-blue);
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
         }
         
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary);
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--weebo-blue);
+            border-radius: 50%;
+            opacity: 0.5;
         }
         
-        .logo i {
-            color: var(--secondary);
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 30px;
-        }
-        
-        nav a {
-            color: var(--light);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            padding: 5px 10px;
-            border-radius: 4px;
-        }
-        
-        nav a:hover {
-            color: var(--primary);
-            background: var(--hologram-blue);
-        }
-        
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 50px;
-            margin-top: 80px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero-content {
-            max-width: 600px;
-            z-index: 2;
-        }
-        
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-            color: #a8b2d1;
-        }
-        
-        .cta-button {
-            display: inline-block;
-            padding: 15px 30px;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: none;
-            cursor: pointer;
-        }
-        
-        .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 217, 255, 0.3);
-        }
-        
-        /* 3D Model Container */
-        #weebo-container {
-            width: 500px;
-            height: 500px;
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
             position: relative;
             z-index: 1;
         }
         
-        .hologram-effect {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, transparent 30%, var(--hologram-blue) 70%);
-            border-radius: 50%;
-            filter: blur(20px);
-            opacity: 0.5;
-            animation: pulse 4s infinite alternate;
-        }
-        
-        @keyframes pulse {
-            0% { opacity: 0.3; transform: scale(0.95); }
-            100% { opacity: 0.7; transform: scale(1.05); }
-        }
-        
-        /* Comparison Section */
-        .section-title {
+        /* Header */
+        header {
             text-align: center;
-            font-size: 2.5rem;
-            margin: 80px 0 40px;
-            color: var(--primary);
+            padding: 40px 0;
+            border-bottom: 1px solid var(--hologram-glow);
+            margin-bottom: 40px;
             position: relative;
         }
         
-        .section-title:after {
-            content: '';
-            position: absolute;
-            width: 100px;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 2px;
-        }
-        
-        .comparison-section {
-            padding: 0 50px 80px;
-        }
-        
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-        
-        .comparison-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(0, 217, 255, 0.2);
-            transition: transform 0.3s ease;
-        }
-        
-        .comparison-card:hover {
-            transform: translateY(-10px);
-        }
-        
-        .card-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            gap: 15px;
-        }
-        
-        .movie-header .icon {
-            color: #ff5555;
-            font-size: 2rem;
-        }
-        
-        .reality-header .icon {
-            color: var(--accent);
-            font-size: 2rem;
-        }
-        
-        .feature-list {
-            list-style: none;
-        }
-        
-        .feature-list li {
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .feature-list li i {
-            width: 20px;
-        }
-        
-        .movie-card .feature-list li i {
-            color: #ff5555;
-        }
-        
-        .reality-card .feature-list li i {
-            color: var(--accent);
-        }
-        
-        /* Tech Stack Section */
-        .tech-stack {
-            padding: 0 50px 80px;
-        }
-        
-        .tech-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            margin-top: 40px;
-        }
-        
-        .tech-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 25px;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 1px solid transparent;
-        }
-        
-        .tech-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-5px);
-        }
-        
-        .tech-icon {
+        .logo {
             font-size: 3rem;
             margin-bottom: 20px;
-            color: var(--primary);
-        }
-        
-        /* Interactive Builder */
-        .builder-section {
-            padding: 0 50px 80px;
-        }
-        
-        .builder-container {
             display: flex;
-            gap: 30px;
-            margin-top: 40px;
-            flex-wrap: wrap;
-        }
-        
-        .components-panel {
-            flex: 1;
-            min-width: 300px;
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 25px;
-        }
-        
-        .preview-panel {
-            flex: 1;
-            min-width: 300px;
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
+            gap: 20px;
         }
         
-        .component-option {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-        
-        .component-option:hover {
-            background: rgba(0, 217, 255, 0.1);
-        }
-        
-        .component-option.selected {
-            border-color: var(--primary);
-            background: rgba(0, 217, 255, 0.2);
-        }
-        
-        .stats-display {
-            margin-top: 30px;
-            width: 100%;
-        }
-        
-        .stat-item {
+        .logo-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--weebo-blue), var(--weebo-pink));
+            border-radius: 50%;
             display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            align-items: center;
+            justify-content: center;
+            animation: float 3s ease-in-out infinite;
+            box-shadow: 0 0 30px var(--weebo-blue);
         }
         
-        .stat-value {
-            color: var(--accent);
-            font-weight: 600;
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
         }
         
-        /* Live Demo Section */
-        .demo-section {
-            padding: 0 50px 80px;
+        .logo-icon i {
+            font-size: 2.5rem;
+            color: white;
         }
         
-        .demo-container {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 30px;
-            margin-top: 40px;
+        .tagline {
+            font-size: 1.2rem;
+            color: var(--weebo-blue);
+            margin-top: 10px;
+        }
+        
+        /* Main Content */
+        .main-content {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: 1fr 1fr;
             gap: 30px;
+            margin-bottom: 50px;
         }
         
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Weebo Interface Panel */
+        .weebo-panel {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid var(--hologram-glow);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .weebo-panel::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                transparent,
+                var(--weebo-blue),
+                transparent 30%
+            );
+            animation: rotate 10s linear infinite;
+            z-index: -1;
+        }
+        
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+        
+        .panel-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            background: #00ff00;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* Chat Interface */
         .chat-container {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            padding: 20px;
             height: 400px;
             display: flex;
             flex-direction: column;
@@ -368,662 +183,848 @@
         .chat-messages {
             flex: 1;
             overflow-y: auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
             margin-bottom: 20px;
+            border: 1px solid rgba(0, 195, 255, 0.1);
         }
         
         .message {
-            padding: 10px 15px;
-            margin-bottom: 10px;
-            border-radius: 10px;
+            margin-bottom: 15px;
+            padding: 12px 18px;
+            border-radius: 18px;
             max-width: 80%;
+            animation: fadeIn 0.3s ease;
         }
         
-        .user-message {
-            background: rgba(0, 217, 255, 0.2);
-            margin-left: auto;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .weebo-message {
-            background: rgba(255, 0, 208, 0.2);
+            background: linear-gradient(135deg, rgba(0, 195, 255, 0.2), rgba(255, 0, 204, 0.1));
+            border: 1px solid var(--hologram-glow);
+            margin-right: auto;
         }
         
-        .chat-input {
+        .user-message {
+            background: rgba(255, 255, 255, 0.1);
+            margin-left: auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .message-time {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+        
+        .chat-input-container {
             display: flex;
             gap: 10px;
         }
         
-        .chat-input input {
+        .chat-input {
             flex: 1;
-            padding: 12px 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            border-radius: 5px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--hologram-glow);
+            border-radius: 10px;
             color: white;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
         }
         
-        .chat-input button {
-            padding: 12px 20px;
-            background: var(--primary);
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--weebo-blue);
+            box-shadow: 0 0 10px var(--hologram-glow);
+        }
+        
+        .send-btn {
+            padding: 15px 25px;
+            background: linear-gradient(135deg, var(--weebo-blue), var(--weebo-pink));
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             color: white;
             cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
         }
         
-        /* Hologram Simulator */
-        .hologram-simulator {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
+        .send-btn:hover {
+            transform: scale(1.05);
         }
         
-        .hologram-display {
-            width: 250px;
-            height: 250px;
-            background: linear-gradient(45deg, rgba(0, 217, 255, 0.1), rgba(255, 0, 208, 0.1));
-            border-radius: 50%;
-            position: relative;
-            overflow: hidden;
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 50px rgba(0, 217, 255, 0.3);
+        /* Features Panel */
+        .features-panel {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid var(--hologram-glow);
+            backdrop-filter: blur(10px);
         }
         
-        .hologram-face {
-            width: 80%;
-            height: 80%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 30%, transparent 70%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
         }
         
-        .hologram-controls {
-            display: flex;
-            gap: 15px;
-        }
-        
-        .hologram-controls button {
-            padding: 10px 20px;
-            background: rgba(0, 217, 255, 0.2);
-            border: 1px solid var(--primary);
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
+        .feature-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 195, 255, 0.1);
             transition: all 0.3s ease;
         }
         
-        .hologram-controls button:hover {
-            background: var(--primary);
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--weebo-blue);
+            box-shadow: 0 10px 20px rgba(0, 195, 255, 0.2);
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--weebo-blue);
+        }
+        
+        .feature-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background: transparent;
+            border: 1px solid var(--weebo-blue);
+            color: var(--weebo-blue);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .feature-btn:hover {
+            background: var(--weebo-blue);
+            color: white;
+        }
+        
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .control-btn {
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--hologram-glow);
+            border-radius: 8px;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .control-btn:hover {
+            background: var(--hologram-glow);
+        }
+        
+        /* Hologram Display */
+        .hologram-display {
+            height: 200px;
+            margin: 30px 0;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .hologram {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, rgba(0, 195, 255, 0.3), rgba(255, 0, 204, 0.3));
+            border-radius: 50%;
+            position: relative;
+            animation: hologramFloat 4s ease-in-out infinite;
+        }
+        
+        @keyframes hologramFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        .hologram::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(135deg, var(--weebo-blue), var(--weebo-pink));
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.5;
+            filter: blur(20px);
+        }
+        
+        .hologram-face {
+            font-size: 3rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
         
         /* Footer */
         footer {
-            background: rgba(5, 15, 30, 0.9);
-            padding: 50px;
             text-align: center;
-            border-top: 1px solid var(--hologram-blue);
+            padding: 40px 0;
+            border-top: 1px solid var(--hologram-glow);
+            margin-top: 50px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
         }
         
-        .footer-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .social-links {
+        .footer-links {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin: 30px 0;
+            gap: 30px;
+            margin-top: 20px;
         }
         
-        .social-links a {
-            color: var(--light);
-            font-size: 1.5rem;
-            transition: color 0.3s ease;
+        .footer-links a {
+            color: var(--weebo-blue);
+            text-decoration: none;
         }
         
-        .social-links a:hover {
-            color: var(--primary);
+        .footer-links a:hover {
+            text-decoration: underline;
         }
         
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .hero {
-                flex-direction: column;
-                text-align: center;
-                padding: 40px 20px;
-            }
-            
-            .hero-content {
-                margin-bottom: 50px;
-            }
-            
-            #weebo-container {
-                width: 300px;
-                height: 300px;
-            }
-            
-            .comparison-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .comparison-section, .tech-stack, .builder-section, .demo-section {
-                padding: 0 20px 60px;
-            }
-            
-            header {
-                padding: 20px;
-            }
-            
-            nav ul {
-                gap: 15px;
-            }
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
         
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .section-title {
-                font-size: 2rem;
-            }
-            
-            nav ul {
-                display: none;
-            }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--weebo-blue);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--weebo-pink);
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="logo">
-            <i class="fas fa-robot"></i>
-            <span>Project Weebo</span>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="#comparison">Movie vs Reality</a></li>
-                <li><a href="#tech">Tech Stack</a></li>
-                <li><a href="#builder">Build Your Own</a></li>
-                <li><a href="#demo">Live Demos</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Build Your Own Weebo</h1>
-            <p>Can we create the iconic AI assistant from Disney's <strong>Flubber</strong> using today's technology? Explore the science, build your own virtual Weebo, and join the community of makers pushing the boundaries of robotics and AI.</p>
-            <a href="#builder" class="cta-button">Start Building Now <i class="fas fa-rocket"></i></a>
-        </div>
-        <div id="weebo-container">
-            <div class="hologram-effect"></div>
-            <!-- 3D model will be inserted here by JavaScript -->
-        </div>
-    </section>
-
-    <!-- Movie vs Reality Comparison -->
-    <section id="comparison" class="comparison-section">
-        <h2 class="section-title">Movie Magic vs Real Science</h2>
-        <div class="comparison-grid">
-            <div class="comparison-card movie-card">
-                <div class="card-header movie-header">
-                    <i class="fas fa-film icon"></i>
-                    <h3>Movie Weebo (1997)</h3>
-                </div>
-                <ul class="feature-list">
-                    <li><i class="fas fa-check-circle"></i> Anti-gravity hover (no visible propulsion)</li>
-                    <li><i class="fas fa-check-circle"></i> True free-floating holograms</li>
-                    <li><i class="fas fa-check-circle"></i> Human-like emotions and consciousness</li>
-                    <li><i class="fas fa-check-circle"></i> Unlimited battery life</li>
-                    <li><i class="fas fa-check-circle"></i> Compact size (volleyball-sized)</li>
-                    <li><i class="fas fa-check-circle"></i> Advanced object manipulation</li>
-                    <li><i class="fas fa-check-circle"></i> Silent operation</li>
-                </ul>
-            </div>
-            <div class="comparison-card reality-card">
-                <div class="card-header reality-header">
-                    <i class="fas fa-microchip icon"></i>
-                    <h3>Real Tech (2024)</h3>
-                </div>
-                <ul class="feature-list">
-                    <li><i class="fas fa-check-circle"></i> Quadcopter drones with visible propellers</li>
-                    <li><i class="fas fa-check-circle"></i> Pepper's Ghost illusions & AR projections</li>
-                    <li><i class="fas fa-check-circle"></i> LLM personality simulations (no true consciousness)</li>
-                    <li><i class="fas fa-check-circle"></i> 10-30 minute battery life with current tech</li>
-                    <li><i class="fas fa-check-circle"></i> Possible with Raspberry Pi and compact components</li>
-                    <li><i class="fas fa-check-circle"></i> Limited manipulation (grippers, simple arms)</li>
-                    <li><i class="fas fa-check-circle"></i> Propeller noise (40-80 dB)</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <!-- Tech Stack Section -->
-    <section id="tech" class="tech-stack">
-        <h2 class="section-title">Required Technology Stack</h2>
-        <div class="tech-grid">
-            <div class="tech-card">
-                <i class="fas fa-helicopter tech-icon"></i>
-                <h3>Flight System</h3>
-                <p>Micro drones, quadcopters, or ducted fans for hover capability.</p>
-            </div>
-            <div class="tech-card">
-                <i class="fas fa-brain tech-icon"></i>
-                <h3>AI Processing</h3>
-                <p>Raspberry Pi 5, NVIDIA Jetson, or smartphone chip for AI tasks.</p>
-            </div>
-            <div class="tech-card">
-                <i class="fas fa-projector tech-icon"></i>
-                <h3>Display System</h3>
-                <p>Pico projectors, OLED screens, or holographic foil for visuals.</p>
-            </div>
-            <div class="tech-card">
-                <i class="fas fa-battery-full tech-icon"></i>
-                <h3>Power Supply</h3>
-                <p>LiPo batteries, wireless charging, or supercapacitors for energy.</p>
-            </div>
-            <div class="tech-card">
-                <i class="fas fa-robot tech-icon"></i>
-                <h3>Manipulation</h3>
-                <p>Micro servos, robotic grippers, or telescoping arms.</p>
-            </div>
-            <div class="tech-card">
-                <i class="fas fa-satellite-dish tech-icon"></i>
-                <h3>Sensors</h3>
-                <p>Cameras, microphones, LIDAR, and IMU for environmental awareness.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Interactive Builder -->
-    <section id="builder" class="builder-section">
-        <h2 class="section-title">Build Your Own Weebo</h2>
-        <div class="builder-container">
-            <div class="components-panel">
-                <h3><i class="fas fa-cogs"></i> Select Components</h3>
-                <div class="component-option" data-component="flight" data-cost="250" data-power="high">
-                    <h4>Flight System</h4>
-                    <p>Choose hover technology</p>
-                    <div class="options">
-                        <button class="option-btn active" data-value="quadcopter">Quadcopter ($250)</button>
-                        <button class="option-btn" data-value="ducted">Ducted Fan ($350)</button>
-                        <button class="option-btn" data-value="balloon">Helium Balloon ($100)</button>
-                    </div>
-                </div>
-                <div class="component-option" data-component="ai" data-cost="100" data-power="medium">
-                    <h4>AI Brain</h4>
-                    <p>Choose processing unit</p>
-                    <div class="options">
-                        <button class="option-btn active" data-value="rpi">Raspberry Pi 5 ($100)</button>
-                        <button class="option-btn" data-value="jetson">NVIDIA Jetson ($500)</button>
-                        <button class="option-btn" data-value="smartphone">Smartphone SOC ($200)</button>
-                    </div>
-                </div>
-                <div class="component-option" data-component="display" data-cost="150" data-power="low">
-                    <h4>Display</h4>
-                    <p>Choose visual output</p>
-                    <div class="options">
-                        <button class="option-btn active" data-value="projector">Pico Projector ($150)</button>
-                        <button class="option-btn" data-value="oled">OLED Screen ($200)</button>
-                        <button class="option-btn" data-value="hologram">Holographic Foil ($80)</button>
-                    </div>
-                </div>
-                <div class="component-option" data-component="personality" data-cost="0" data-power="low">
-                    <h4>Personality</h4>
-                    <p>Choose AI personality</p>
-                    <div class="options">
-                        <button class="option-btn active" data-value="helpful">Helpful Assistant</button>
-                        <button class="option-btn" data-value="sassy">Sassy Companion</button>
-                        <button class="option-btn" data-value="scientific">Scientific Mind</button>
-                    </div>
-                </div>
-            </div>
-            <div class="preview-panel">
-                <h3><i class="fas fa-eye"></i> Your Weebo Preview</h3>
-                <div class="weebo-preview">
-                    <div class="hologram-display">
-                        <div class="hologram-face">🤖</div>
-                    </div>
-                    <p>Your custom Weebo configuration</p>
-                </div>
-                <div class="stats-display">
-                    <div class="stat-item">
-                        <span>Estimated Cost:</span>
-                        <span class="stat-value" id="total-cost">$500</span>
-                    </div>
-                    <div class="stat-item">
-                        <span>Battery Life:</span>
-                        <span class="stat-value" id="battery-life">18 minutes</span>
-                    </div>
-                    <div class="stat-item">
-                        <span>Difficulty Level:</span>
-                        <span class="stat-value" id="difficulty">Intermediate</span>
-                    </div>
-                    <div class="stat-item">
-                        <span>Flight Time:</span>
-                        <span class="stat-value" id="flight-time">15 minutes</span>
-                    </div>
-                </div>
-                <button class="cta-button" style="margin-top: 30px;">Download Build Plan</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Live Demos -->
-    <section id="demo" class="demo-section">
-        <h2 class="section-title">Live Demos</h2>
-        <div class="demo-container">
-            <div class="chat-demo">
-                <h3><i class="fas fa-comments"></i> Chat with Weebo</h3>
-                <div class="chat-container">
-                    <div class="chat-messages" id="chat-messages">
-                        <div class="message weebo-message">Hello! I'm Weebo, your AI assistant. How can I help you today?</div>
-                    </div>
-                    <div class="chat-input">
-                        <input type="text" id="chat-input" placeholder="Type your message to Weebo...">
-                        <button id="send-btn"><i class="fas fa-paper-plane"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="hologram-simulator">
-                <h3><i class="fas fa-hologram"></i> Hologram Simulator</h3>
-                <div class="hologram-display">
-                    <div class="hologram-face">👁️</div>
-                </div>
-                <div class="hologram-controls">
-                    <button id="hologram-toggle"><i class="fas fa-power-off"></i> Toggle Hologram</button>
-                    <button id="change-face"><i class="fas fa-random"></i> Change Face</button>
-                </div>
-                <p style="margin-top: 20px;">This simulates the Pepper's Ghost illusion used for hologram effects.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <header>
             <div class="logo">
-                <i class="fas fa-robot"></i>
-                <span>Project Weebo</span>
+                <div class="logo-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h1>WEEBO</h1>
             </div>
-            <p>An open-source initiative to explore the intersection of robotics, AI, and pop culture.</p>
-            <div class="social-links">
-                <a href="#"><i class="fab fa-github"></i></a>
-                <a href="#"><i class="fab fa-youtube"></i></a>
-                <a href="#"><i class="fab fa-discord"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
+            <p class="tagline">Your Web-Based AI Assistant • Inspired by Flubber (1997)</p>
+            <p>No robotics required - Just pure web technology!</p>
+        </header>
+        
+        <div class="main-content">
+            <!-- Left Panel: Weebo Interface -->
+            <div class="weebo-panel">
+                <div class="panel-header">
+                    <div class="status-indicator"></div>
+                    <h2><i class="fas fa-comment-alt"></i> Weebo Chat Interface</h2>
+                </div>
+                
+                <!-- Hologram Display -->
+                <div class="hologram-display">
+                    <div class="hologram">
+                        <div class="hologram-face" id="hologramFace">😊</div>
+                    </div>
+                </div>
+                
+                <!-- Chat Messages -->
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message weebo-message">
+                            Hello! I'm Weebo, your web-based AI assistant! 
+                            <div class="message-time">Just now</div>
+                        </div>
+                        <div class="message weebo-message">
+                            I may not have anti-gravity hover, but I'm here in your browser ready to help!
+                            <div class="message-time">Just now</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Chat Input -->
+                    <div class="chat-input-container">
+                        <input type="text" class="chat-input" id="chatInput" 
+                               placeholder="Type your message to Weebo... (Try: 'help', 'joke', 'time', 'weather')" 
+                               autocomplete="off">
+                        <button class="send-btn" id="sendBtn">
+                            <i class="fas fa-paper-plane"></i> Send
+                        </button>
+                    </div>
+                    
+                    <!-- Quick Controls -->
+                    <div class="controls">
+                        <button class="control-btn" id="clearChat">
+                            <i class="fas fa-broom"></i> Clear Chat
+                        </button>
+                        <button class="control-btn" id="changePersonality">
+                            <i class="fas fa-smile"></i> Change Personality
+                        </button>
+                        <button class="control-btn" id="toggleHologram">
+                            <i class="fas fa-eye"></i> Toggle Hologram
+                        </button>
+                        <button class="control-btn" id="helpBtn">
+                            <i class="fas fa-question-circle"></i> Help
+                        </button>
+                    </div>
+                </div>
             </div>
-            <p>Made with <i class="fas fa-heart" style="color: #ff00d0;"></i> by Flubber fans & robotics enthusiasts</p>
-            <p style="margin-top: 20px; font-size: 0.9rem; color: #a8b2d1;">This project is not affiliated with Disney or the film Flubber. It is a fan-made educational project.</p>
+            
+            <!-- Right Panel: Features & Tools -->
+            <div class="features-panel">
+                <h2><i class="fas fa-tools"></i> Weebo Features & Tools</h2>
+                <p style="margin-top: 10px; opacity: 0.8;">Click any feature to activate it</p>
+                
+                <div class="features-grid">
+                    <!-- Feature Cards -->
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3>Time & Date</h3>
+                        <p>Get current time, date, and timezone information</p>
+                        <button class="feature-btn" data-action="time">
+                            <i class="fas fa-play"></i> Ask Time
+                        </button>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-cloud-sun"></i>
+                        </div>
+                        <h3>Weather</h3>
+                        <p>Get weather information for any city</p>
+                        <button class="feature-btn" data-action="weather">
+                            <i class="fas fa-play"></i> Check Weather
+                        </button>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <h3>Calculator</h3>
+                        <p>Perform calculations and math operations</p>
+                        <button class="feature-btn" data-action="calc">
+                            <i class="fas fa-play"></i> Open Calculator
+                        </button>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-joke"></i>
+                        </div>
+                        <h3>Jokes & Fun</h3>
+                        <p>Hear jokes, riddles, and fun facts</p>
+                        <button class="feature-btn" data-action="joke">
+                            <i class="fas fa-play"></i> Tell a Joke
+                        </button>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <h3>To-Do List</h3>
+                        <p>Manage your tasks and reminders</p>
+                        <button class="feature-btn" data-action="todo">
+                            <i class="fas fa-play"></i> Open To-Do
+                        </button>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <h3>Soundboard</h3>
+                        <p>Play sounds and effects</p>
+                        <button class="feature-btn" data-action="sound">
+                            <i class="fas fa-play"></i> Play Sound
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Extra Tools -->
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--hologram-glow);">
+                    <h3><i class="fas fa-magic"></i> Quick Actions</h3>
+                    <div class="controls" style="margin-top: 15px;">
+                        <button class="control-btn" id="changeTheme">
+                            <i class="fas fa-palette"></i> Change Theme
+                        </button>
+                        <button class="control-btn" id="exportChat">
+                            <i class="fas fa-download"></i> Export Chat
+                        </button>
+                        <button class="control-btn" id="speakBtn">
+                            <i class="fas fa-volume-up"></i> Text-to-Speech
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
-    </footer>
+        
+        <footer>
+            <p>Web-Based Weebo Assistant • Created with HTML, CSS & JavaScript</p>
+            <p>This is a fan-made, non-commercial project inspired by Disney's Flubber (1997)</p>
+            
+            <div class="footer-links">
+                <a href="#" id="viewSource">View Source Code</a>
+                <a href="#" id="reportBug">Report Bug</a>
+                <a href="#" id="suggestFeature">Suggest Feature</a>
+            </div>
+            
+            <p style="margin-top: 20px; font-size: 0.8rem;">
+                <i class="fas fa-code"></i> No backend required • Runs entirely in your browser
+            </p>
+        </footer>
+    </div>
 
     <script>
-        // Interactive Builder Logic
-        document.addEventListener('DOMContentLoaded', function() {
-            // Component selection
-            const componentOptions = document.querySelectorAll('.component-option .option-btn');
-            const totalCostElement = document.getElementById('total-cost');
-            const batteryLifeElement = document.getElementById('battery-life');
-            const difficultyElement = document.getElementById('difficulty');
-            const flightTimeElement = document.getElementById('flight-time');
+        // Initialize particles background
+        function initParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 100;
             
-            // Component costs and power consumption
-            const componentData = {
-                flight: {
-                    quadcopter: { cost: 250, power: 'high', flightTime: 15 },
-                    ducted: { cost: 350, power: 'very-high', flightTime: 12 },
-                    balloon: { cost: 100, power: 'low', flightTime: 60 }
-                },
-                ai: {
-                    rpi: { cost: 100, power: 'medium' },
-                    jetson: { cost: 500, power: 'high' },
-                    smartphone: { cost: 200, power: 'medium' }
-                },
-                display: {
-                    projector: { cost: 150, power: 'medium' },
-                    oled: { cost: 200, power: 'low' },
-                    hologram: { cost: 80, power: 'low' }
-                }
-            };
-            
-            // Power consumption to battery life mapping
-            const powerToBattery = {
-                'low': 30,
-                'medium': 20,
-                'high': 15,
-                'very-high': 10
-            };
-            
-            // Initialize selections
-            let selectedComponents = {
-                flight: 'quadcopter',
-                ai: 'rpi',
-                display: 'projector',
-                personality: 'helpful'
-            };
-            
-            // Update stats function
-            function updateStats() {
-                let totalCost = 0;
-                let totalPower = 0;
-                let flightTime = 0;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
                 
-                // Calculate costs and power
-                for (const [component, value] of Object.entries(selectedComponents)) {
-                    if (componentData[component] && componentData[component][value]) {
-                        totalCost += componentData[component][value].cost;
-                        
-                        if (component === 'flight') {
-                            flightTime = componentData[component][value].flightTime;
-                            totalPower += powerToBattery[componentData[component][value].power] || 0;
-                        } else {
-                            totalPower += powerToBattery[componentData[component][value].power] || 0;
-                        }
+                // Random position
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                
+                // Random size and opacity
+                const size = Math.random() * 4 + 2;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.opacity = Math.random() * 0.5 + 0.2;
+                
+                // Random color (blue or pink)
+                particle.style.background = Math.random() > 0.5 ? 
+                    'var(--weebo-blue)' : 'var(--weebo-pink)';
+                
+                // Random animation
+                const duration = Math.random() * 20 + 10;
+                particle.style.animation = `float ${duration}s ease-in-out infinite`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Weebo AI Responses
+        const weeboPersonalities = {
+            helpful: {
+                name: "Helpful Assistant",
+                greetings: [
+                    "Hello! I'm Weebo, ready to assist you!",
+                    "Hi there! How can I help you today?",
+                    "Greetings! I'm your web-based Weebo assistant.",
+                    "Hello! I may be virtual, but I'm here to help!"
+                ],
+                responses: {
+                    time: () => {
+                        const now = new Date();
+                        return `The current time is ${now.toLocaleTimeString()}, and the date is ${now.toLocaleDateString()}.`;
+                    },
+                    weather: () => {
+                        const conditions = ["sunny", "cloudy", "rainy", "clear", "partly cloudy"];
+                        const randomCondition = conditions[Math.floor(Math.random() * conditions.length)];
+                        const temp = Math.floor(Math.random() * 30) + 10;
+                        return `I'm simulating weather for your location: It's ${temp}°C and ${randomCondition} right now.`;
+                    },
+                    joke: () => {
+                        const jokes = [
+                            "Why don't scientists trust atoms? Because they make up everything!",
+                            "Why did the web developer go broke? Because he used up all his cache!",
+                            "What do you call a fake noodle? An impasta!",
+                            "Why did the robot go on a diet? It had too many mega-bytes!",
+                            "How do you organize a space party? You planet!"
+                        ];
+                        return jokes[Math.floor(Math.random() * jokes.length)];
+                    },
+                    default: (input) => {
+                        return `I'm not sure how to respond to "${input}". Try asking about time, weather, or tell me to tell a joke!`;
                     }
                 }
-                
-                // Calculate battery life (simplified formula)
-                const avgPower = totalPower / 3; // Average of 3 main components
-                const batteryLife = Math.max(5, Math.min(60, Math.round(30 - avgPower)));
-                
-                // Update UI
-                totalCostElement.textContent = '$' + totalCost;
-                batteryLifeElement.textContent = batteryLife + ' minutes';
-                flightTimeElement.textContent = flightTime + ' minutes';
-                
-                // Set difficulty based on cost
-                if (totalCost < 300) {
-                    difficultyElement.textContent = 'Beginner';
-                } else if (totalCost < 600) {
-                    difficultyElement.textContent = 'Intermediate';
-                } else {
-                    difficultyElement.textContent = 'Advanced';
+            },
+            sassy: {
+                name: "Sassy Weebo",
+                greetings: [
+                    "Oh, you finally figured out how to turn me on. How... impressive.",
+                    "Look who decided to show up. What do you want?",
+                    "Ugh, another human. What is it this time?",
+                    "I'm here, but I'm not happy about it."
+                ],
+                responses: {
+                    time: () => {
+                        return `It's time you got a watch. But since you asked: ${new Date().toLocaleTimeString()}`;
+                    },
+                    weather: () => {
+                        return "Do I look like a weather satellite? Fine. It's probably raining somewhere.";
+                    },
+                    joke: () => {
+                        return "Your face. That's the joke.";
+                    },
+                    default: (input) => {
+                        return `Seriously? "${input}"? That's what you're going with?`;
+                    }
+                }
+            },
+            scientific: {
+                name: "Scientific Weebo",
+                greetings: [
+                    "Greetings. I am operating at optimal efficiency.",
+                    "Weebo ready for scientific analysis and assistance.",
+                    "All systems nominal. How may I assist with your inquiries?",
+                    "Online and ready for computational tasks."
+                ],
+                responses: {
+                    time: () => {
+                        const now = new Date();
+                        const unix = Math.floor(now.getTime() / 1000);
+                        return `Current time: ${now.toISOString()} | Unix timestamp: ${unix} | UTC offset: ${now.getTimezoneOffset()} minutes`;
+                    },
+                    weather: () => {
+                        return "Weather simulation initialized. Based on atmospheric data patterns, there is a 67.3% probability of precipitation within 24 hours.";
+                    },
+                    joke: () => {
+                        return "Why was the math book sad? It had too many problems. Note: This is a demonstration of humor algorithms.";
+                    },
+                    default: (input) => {
+                        return `Input "${input}" does not match known command patterns. Please use structured queries for optimal results.`;
+                    }
                 }
             }
+        };
+        
+        let currentPersonality = 'helpful';
+        let chatHistory = [];
+        let hologramVisible = true;
+        
+        // DOM Elements
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const hologramFace = document.getElementById('hologramFace');
+        
+        // Initialize
+        function initWeebo() {
+            initParticles();
+            addMessage(getRandomGreeting(), 'weebo');
             
-            // Add click events to option buttons
-            componentOptions.forEach(btn => {
+            // Set up event listeners
+            sendBtn.addEventListener('click', handleSendMessage);
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') handleSendMessage();
+            });
+            
+            // Feature buttons
+            document.querySelectorAll('.feature-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    // Remove active class from siblings
-                    const parentOptions = this.parentElement;
-                    parentOptions.querySelectorAll('.option-btn').forEach(b => b.classList.remove('active'));
-                    
-                    // Add active class to clicked button
-                    this.classList.add('active');
-                    
-                    // Get component type from parent
-                    const componentCard = this.closest('.component-option');
-                    const componentType = componentCard.getAttribute('data-component');
-                    
-                    // Get value from button
-                    const value = this.getAttribute('data-value');
-                    
-                    // Update selected components
-                    selectedComponents[componentType] = value;
-                    
-                    // Update stats
-                    updateStats();
-                    
-                    // Update hologram face based on personality
-                    if (componentType === 'personality') {
-                        const faceElement = document.querySelector('.hologram-face');
-                        const faces = {
-                            'helpful': '😊',
-                            'sassy': '😏',
-                            'scientific': '🧐'
-                        };
-                        faceElement.textContent = faces[value] || '🤖';
+                    const action = this.getAttribute('data-action');
+                    handleFeatureAction(action);
+                });
+            });
+            
+            // Control buttons
+            document.getElementById('clearChat').addEventListener('click', clearChat);
+            document.getElementById('changePersonality').addEventListener('click', changePersonality);
+            document.getElementById('toggleHologram').addEventListener('click', toggleHologram);
+            document.getElementById('helpBtn').addEventListener('click', showHelp);
+            document.getElementById('changeTheme').addEventListener('click', changeTheme);
+            document.getElementById('exportChat').addEventListener('click', exportChat);
+            document.getElementById('speakBtn').addEventListener('click', toggleSpeech);
+            
+            // Footer links
+            document.getElementById('viewSource').addEventListener('click', function(e) {
+                e.preventDefault();
+                addMessage("You can view the source code by right-clicking and selecting 'View Page Source' or pressing Ctrl+U!", 'weebo');
+            });
+            
+            document.getElementById('reportBug').addEventListener('click', function(e) {
+                e.preventDefault();
+                addMessage("Bug reporting: This is a demo project! In a real app, this would open a bug report form.", 'weebo');
+            });
+            
+            document.getElementById('suggestFeature').addEventListener('click', function(e) {
+                e.preventDefault();
+                addMessage("Feature suggestions: Try saying 'I wish Weebo could...' and I'll pretend to note it down!", 'weebo');
+            });
+        }
+        
+        // Message handling
+        function addMessage(text, sender = 'weebo') {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            
+            const time = new Date();
+            const timeString = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            messageDiv.innerHTML = `
+                ${text}
+                <div class="message-time">${timeString}</div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Add to history
+            chatHistory.push({ text, sender, time: timeString });
+            
+            // Update hologram face based on message
+            updateHologramFace(text, sender);
+        }
+        
+        function handleSendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+            
+            // Add user message
+            addMessage(message, 'user');
+            chatInput.value = '';
+            
+            // Process and respond
+            setTimeout(() => {
+                const response = processMessage(message);
+                addMessage(response, 'weebo');
+            }, 500);
+        }
+        
+        function processMessage(input) {
+            const inputLower = input.toLowerCase();
+            const personality = weeboPersonalities[currentPersonality];
+            
+            // Check for keywords
+            if (inputLower.includes('time') || inputLower.includes('clock')) {
+                return personality.responses.time();
+            }
+            else if (inputLower.includes('weather') || inputLower.includes('temperature')) {
+                return personality.responses.weather();
+            }
+            else if (inputLower.includes('joke') || inputLower.includes('funny')) {
+                return personality.responses.joke();
+            }
+            else if (inputLower.includes('help')) {
+                return "I can help with: time, weather, jokes, calculations, and more! Click the feature buttons or type what you need.";
+            }
+            else if (inputLower.includes('hello') || inputLower.includes('hi')) {
+                return getRandomGreeting();
+            }
+            else if (inputLower.includes('calculator') || inputLower.includes('calculate')) {
+                try {
+                    // Simple calculation parsing
+                    const calcMatch = input.match(/(\d+)\s*([\+\-\*\/])\s*(\d+)/);
+                    if (calcMatch) {
+                        const num1 = parseInt(calcMatch[1]);
+                        const operator = calcMatch[2];
+                        const num2 = parseInt(calcMatch[3]);
+                        let result;
+                        
+                        switch(operator) {
+                            case '+': result = num1 + num2; break;
+                            case '-': result = num1 - num2; break;
+                            case '*': result = num1 * num2; break;
+                            case '/': result = num2 !== 0 ? num1 / num2 : 'Error: Division by zero'; break;
+                            default: result = 'Unknown operator';
+                        }
+                        
+                        return `Calculation: ${num1} ${operator} ${num2} = ${result}`;
                     }
-                });
-            });
-            
-            // Chatbot functionality
-            const chatMessages = document.getElementById('chat-messages');
-            const chatInput = document.getElementById('chat-input');
-            const sendBtn = document.getElementById('send-btn');
-            
-            const weeboResponses = [
-                "I may not have anti-gravity propulsion, but I'm here to help!",
-                "Professor Brainard would be proud of your interest in robotics!",
-                "Did you know the real challenge is battery life, not AI?",
-                "I can simulate emotions, but I don't actually feel them. Yet.",
-                "Hover technology has come a long way since 1997!",
-                "A true hologram like in the movie would require bending light in ways we can't yet.",
-                "Building a real Weebo would cost about $800-$1500 in parts.",
-                "My movie version could fly silently. Real drones? Not so much!"
-            ];
-            
-            function addMessage(text, isUser = false) {
-                const messageDiv = document.createElement('div');
-                messageDiv.classList.add('message');
-                messageDiv.classList.add(isUser ? 'user-message' : 'weebo-message');
-                messageDiv.textContent = text;
-                chatMessages.appendChild(messageDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
+                } catch(e) {
+                    // Ignore errors
+                }
             }
             
-            function getWeeboResponse() {
-                return weeboResponses[Math.floor(Math.random() * weeboResponses.length)];
+            // Default response
+            return personality.responses.default(input);
+        }
+        
+        function handleFeatureAction(action) {
+            const personality = weeboPersonalities[currentPersonality];
+            
+            switch(action) {
+                case 'time':
+                    addMessage(personality.responses.time(), 'weebo');
+                    break;
+                case 'weather':
+                    addMessage(personality.responses.weather(), 'weebo');
+                    break;
+                case 'joke':
+                    addMessage(personality.responses.joke(), 'weebo');
+                    break;
+                case 'calc':
+                    addMessage("Calculator: Try typing something like '5 + 3' or '10 * 2' and I'll calculate it!", 'weebo');
+                    break;
+                case 'todo':
+                    addMessage("To-Do List: In a full version, this would open a task manager. For now, try saying 'remind me to...'", 'weebo');
+                    break;
+                case 'sound':
+                    // Play a sound
+                    try {
+                        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                        const oscillator = audioContext.createOscillator();
+                        oscillator.connect(audioContext.destination);
+                        oscillator.frequency.value = 523.25; // C5
+                        oscillator.start();
+                        setTimeout(() => oscillator.stop(), 200);
+                        addMessage("Played a sound effect! 🔊", 'weebo');
+                    } catch(e) {
+                        addMessage("Sound played in my digital mind! 🔊", 'weebo');
+                    }
+                    break;
             }
+        }
+        
+        // Helper functions
+        function getRandomGreeting() {
+            const greetings = weeboPersonalities[currentPersonality].greetings;
+            return greetings[Math.floor(Math.random() * greetings.length)];
+        }
+        
+        function clearChat() {
+            chatMessages.innerHTML = '';
+            chatHistory = [];
+            addMessage("Chat cleared! How can I assist you now?", 'weebo');
+        }
+        
+        function changePersonality() {
+            const personalities = Object.keys(weeboPersonalities);
+            let currentIndex = personalities.indexOf(currentPersonality);
+            currentPersonality = personalities[(currentIndex + 1) % personalities.length];
             
-            sendBtn.addEventListener('click', function() {
-                const message = chatInput.value.trim();
-                if (message) {
-                    addMessage(message, true);
-                    chatInput.value = '';
-                    
-                    // Simulate typing delay
-                    setTimeout(() => {
-                        addMessage(getWeeboResponse());
-                    }, 500);
-                }
-            });
+            const personalityName = weeboPersonalities[currentPersonality].name;
+            addMessage(`Personality changed to: ${personalityName}`, 'weebo');
+            updateHologramFace(`Personality: ${personalityName}`, 'weebo');
+        }
+        
+        function toggleHologram() {
+            hologramVisible = !hologramVisible;
+            const hologram = document.querySelector('.hologram');
             
-            chatInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    sendBtn.click();
-                }
-            });
+            if (hologramVisible) {
+                hologram.style.opacity = '1';
+                addMessage("Hologram display activated!", 'weebo');
+            } else {
+                hologram.style.opacity = '0.3';
+                addMessage("Hologram display dimmed.", 'weebo');
+            }
+        }
+        
+        function updateHologramFace(text, sender) {
+            if (sender === 'weebo') {
+                const faces = ['😊', '🤖', '😎', '🧠', '💡', '✨', '🌟', '⚡'];
+                const randomFace = faces[Math.floor(Math.random() * faces.length)];
+                hologramFace.textContent = randomFace;
+                
+                // Animate
+                hologramFace.style.transform = 'translate(-50%, -50%) scale(1.2)';
+                setTimeout(() => {
+                    hologramFace.style.transform = 'translate(-50%, -50%) scale(1)';
+                }, 200);
+            } else {
+                hologramFace.textContent = '👂';
+                setTimeout(() => {
+                    hologramFace.textContent = '🤔';
+                }, 500);
+            }
+        }
+        
+        function showHelp() {
+            const helpText = `
+                <strong>Weebo Web Assistant Help:</strong><br><br>
+                <strong>Chat:</strong> Type anything and I'll respond!<br>
+                <strong>Features:</strong> Click the buttons for quick actions<br>
+                <strong>Commands to try:</strong><br>
+                - "What time is it?"<br>
+                - "Tell me a joke"<br>
+                - "What's the weather?"<br>
+                - "5 + 3" (calculations)<br>
+                <br>
+                <strong>Controls:</strong><br>
+                - Change Personality: Switches my mood<br>
+                - Toggle Hologram: Shows/hides my hologram<br>
+                - Clear Chat: Starts fresh<br>
+                <br>
+                I'm a pure web-based AI - no backend needed!
+            `;
+            addMessage(helpText, 'weebo');
+        }
+        
+        function changeTheme() {
+            const themes = ['default', 'dark', 'matrix', 'pastel'];
+            const randomTheme = themes[Math.floor(Math.random() * themes.length)];
+            addMessage(`Theme changed to: ${randomTheme} (simulated - would change colors in full version)`, 'weebo');
+        }
+        
+        function exportChat() {
+            const chatText = chatHistory.map(msg => 
+                `[${msg.time}] ${msg.sender.toUpperCase()}: ${msg.text}`
+            ).join('\n');
             
-            // Hologram simulator
-            const hologramToggle = document.getElementById('hologram-toggle');
-            const changeFaceBtn = document.getElementById('change-face');
-            const hologramDisplay = document.querySelector('.hologram-display');
-            const hologramFace = document.querySelector('.hologram-face');
+            // Create download
+            const blob = new Blob([chatText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'weebo-chat-export.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
             
-            let hologramOn = true;
-            const faces = ['👁️', '🤖', '😊', '🧠', '💡', '⚡'];
-            let currentFaceIndex = 0;
-            
-            hologramToggle.addEventListener('click', function() {
-                hologramOn = !hologramOn;
-                if (hologramOn) {
-                    hologramDisplay.style.boxShadow = '0 0 50px rgba(0, 217, 255, 0.3)';
-                    hologramToggle.innerHTML = '<i class="fas fa-power-off"></i> Toggle Hologram';
+            addMessage("Chat exported as text file!", 'weebo');
+        }
+        
+        function toggleSpeech() {
+            if ('speechSynthesis' in window) {
+                const lastMessage = chatHistory.filter(msg => msg.sender === 'weebo').pop();
+                if (lastMessage) {
+                    const utterance = new SpeechSynthesisUtterance(lastMessage.text);
+                    utterance.rate = 1.0;
+                    utterance.pitch = 1.0;
+                    speechSynthesis.speak(utterance);
+                    addMessage("Speaking my last message!", 'weebo');
                 } else {
-                    hologramDisplay.style.boxShadow = 'none';
-                    hologramToggle.innerHTML = '<i class="fas fa-power-off"></i> Turn On';
+                    addMessage("Nothing to speak yet! Send me a message first.", 'weebo');
                 }
-            });
-            
-            changeFaceBtn.addEventListener('click', function() {
-                currentFaceIndex = (currentFaceIndex + 1) % faces.length;
-                hologramFace.textContent = faces[currentFaceIndex];
-            });
-            
-            // Initialize 3D model placeholder (simplified)
-            // In a real implementation, you would load a GLTF/GLB model of Weebo
-            function init3DModel() {
-                const container = document.getElementById('weebo-container');
-                const scene = new THREE.Scene();
-                const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-                const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-                
-                renderer.setSize(400, 400);
-                container.appendChild(renderer.domElement);
-                
-                // Add a simple sphere as placeholder
-                const geometry = new THREE.SphereGeometry(1, 32, 32);
-                const material = new THREE.MeshPhongMaterial({ 
-                    color: 0x00d9ff, 
-                    shininess: 100,
-                    transparent: true,
-                    opacity: 0.8
-                });
-                const sphere = new THREE.Mesh(geometry, material);
-                scene.add(sphere);
-                
-                // Add lights
-                const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-                scene.add(ambientLight);
-                
-                const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-                directionalLight.position.set(5, 5, 5);
-                scene.add(directionalLight);
-                
-                camera.position.z = 3;
-                
-                // Add orbit controls if needed
-                // const controls = new THREE.OrbitControls(camera, renderer.domElement);
-                
-                // Animation loop
-                function animate() {
-                    requestAnimationFrame(animate);
-                    sphere.rotation.y += 0.01;
-                    // controls.update();
-                    renderer.render(scene, camera);
-                }
-                
-                animate();
-                
-                // Handle window resize
-                window.addEventListener('resize', function() {
-                    camera.aspect = 1;
-                    camera.updateProjectionMatrix();
-                    renderer.setSize(400, 400);
-                });
+            } else {
+                addMessage("Text-to-speech not supported in this browser.", 'weebo');
             }
-            
-            // Initialize 3D model if Three.js loaded
-            if (typeof THREE !== 'undefined') {
-                init3DModel();
-            }
-            
-            // Initialize stats
-            updateStats();
-        });
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initWeebo);
     </script>
 </body>
 </html>
