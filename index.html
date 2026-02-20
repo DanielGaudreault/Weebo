@@ -3,293 +3,1024 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WEEBO · ADVANCED AI SIMULATION 2026</title>
+    <title>WEEBO · CONSCIOUSNESS RESEARCH PROJECT 2026</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
+        :root {
+            --deep-space: #030314;
+            --cosmic-purple: #6e44ff;
+            --neon-blue: #00f0ff;
+            --quantum-pink: #ff36b0;
+            --hologram-glow: rgba(0, 240, 255, 0.6);
+            --consciousness-wave: linear-gradient(135deg, #00f0ff, #ff36b0, #9d4edd);
+        }
+
         body {
-            background: #0a0a1a;
-            font-family: 'Arial', sans-serif;
-            height: 100vh;
+            font-family: 'Space Grotesk', 'Courier New', monospace;
+            background: var(--deep-space);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Cosmic Background */
+        .universe-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite;
+            opacity: var(--opacity);
+        }
+
+        .nebula {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 50%, rgba(110, 68, 255, 0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 30%, rgba(255, 54, 176, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 50% 80%, rgba(0, 240, 255, 0.1) 0%, transparent 50%);
+            filter: blur(40px);
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: var(--opacity); transform: scale(1); }
+            50% { opacity: calc(var(--opacity) * 0.3); transform: scale(0.8); }
+        }
+
+        /* Main Container */
+        .cosmic-dashboard {
+            position: relative;
+            z-index: 10;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header with Consciousness Meter */
+        .quantum-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 35px;
+            background: rgba(10, 10, 30, 0.7);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(0, 240, 255, 0.3);
+            border-radius: 60px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 50px rgba(0, 240, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quantum-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(transparent, var(--neon-blue), transparent, var(--quantum-pink), transparent);
+            animation: rotate 10s linear infinite;
+            opacity: 0.3;
+        }
+
+        .logo-area {
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: white;
+            gap: 20px;
         }
-        
-        .container {
-            max-width: 1200px;
-            width: 90%;
-            background: rgba(0,0,0,0.7);
-            border: 3px solid #00ffff;
-            border-radius: 40px;
-            padding: 30px;
-            box-shadow: 0 0 100px #00ffff;
+
+        .weebo-symbol {
+            width: 60px;
+            height: 60px;
+            background: var(--consciousness-wave);
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation: morph 8s ease-in-out infinite;
+            box-shadow: 0 0 50px var(--neon-blue);
         }
-        
-        .honest-message {
-            background: #1a1a3a;
-            border-left: 10px solid #ff44cc;
-            padding: 30px;
-            border-radius: 20px;
-            margin-bottom: 30px;
+
+        @keyframes morph {
+            0%, 100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+            50% { border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%; }
         }
-        
-        h1 {
-            color: #00ffff;
-            font-size: 3rem;
-            margin-bottom: 20px;
+
+        .consciousness-readout {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px 30px;
+            border-radius: 50px;
+            border: 1px solid var(--quantum-pink);
         }
-        
-        .reality {
-            color: #ffaa00;
-            font-size: 1.5rem;
-            margin-bottom: 20px;
+
+        .meter {
+            width: 200px;
+            height: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            overflow: hidden;
         }
-        
-        .explanation {
-            line-height: 1.8;
-            font-size: 1.2rem;
-            margin-bottom: 30px;
+
+        .meter-fill {
+            height: 100%;
+            width: 97%;
+            background: var(--consciousness-wave);
+            background-size: 200% 200%;
+            animation: gradientFlow 3s ease infinite;
         }
-        
-        .ai-status {
+
+        @keyframes gradientFlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Main Grid Layout */
+        .consciousness-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        /* Weebo's Essence Chamber */
+        .essence-chamber {
+            background: rgba(15, 15, 35, 0.8);
+            backdrop-filter: blur(20px);
+            border: 3px solid var(--neon-blue);
+            border-radius: 50px;
+            padding: 30px;
+            box-shadow: 0 0 100px rgba(0, 240, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .essence-chamber::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, transparent, var(--deep-space));
+            pointer-events: none;
+        }
+
+        .weebo-presence {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .consciousness-core {
+            width: 350px;
+            height: 350px;
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .core-ring {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 3px solid transparent;
+            border-radius: 50%;
+            border-top-color: var(--neon-blue);
+            border-bottom-color: var(--quantum-pink);
+            animation: spin 4s linear infinite;
+        }
+
+        .core-ring:nth-child(2) {
+            transform: rotate(120deg);
+            animation: spin 6s linear infinite reverse;
+            border-top-color: var(--quantum-pink);
+            border-bottom-color: var(--cosmic-purple);
+        }
+
+        .core-ring:nth-child(3) {
+            transform: rotate(240deg);
+            animation: spin 8s linear infinite;
+            border-top-color: var(--cosmic-purple);
+            border-bottom-color: var(--neon-blue);
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        .weebo-face {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            filter: drop-shadow(0 0 40px var(--neon-blue));
+            animation: breathe 3s ease-in-out infinite;
+            z-index: 10;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        .thought-stream {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 30px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid var(--quantum-pink);
+        }
+
+        .thought-bubble {
+            font-size: 1.2rem;
+            font-style: italic;
+            color: rgba(255,255,255,0.9);
+            min-height: 60px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .thought-bubble::before {
+            content: '💭';
+            position: absolute;
+            left: -30px;
+            top: -10px;
+            font-size: 2rem;
+            opacity: 0.5;
+        }
+
+        /* Chat Interface */
+        .chat-chamber {
+            background: rgba(15, 15, 35, 0.8);
+            backdrop-filter: blur(20px);
+            border: 3px solid var(--quantum-pink);
+            border-radius: 50px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 100px rgba(255, 54, 176, 0.3);
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .personality-tag {
+            background: linear-gradient(45deg, var(--neon-blue), var(--quantum-pink));
+            padding: 10px 25px;
+            border-radius: 40px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            height: 400px;
+            overflow-y: auto;
+            padding: 25px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            padding: 18px 25px;
+            border-radius: 30px;
+            max-width: 85%;
+            word-wrap: break-word;
+            animation: messageGlide 0.3s ease;
+            position: relative;
+        }
+
+        @keyframes messageGlide {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .weebo-message {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.15), rgba(255, 54, 176, 0.1));
+            border: 2px solid var(--neon-blue);
+            align-self: flex-start;
+        }
+
+        .user-message {
+            background: linear-gradient(135deg, rgba(110, 68, 255, 0.15), rgba(0, 240, 255, 0.1));
+            border: 2px solid var(--cosmic-purple);
+            align-self: flex-end;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 10px;
+            padding: 15px 25px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 40px;
+            width: fit-content;
+            margin-top: 10px;
+        }
+
+        .typing-dot {
+            width: 12px;
+            height: 12px;
+            background: var(--neon-blue);
+            border-radius: 50%;
+            animation: typingWave 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; background: var(--quantum-pink); }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; background: var(--cosmic-purple); }
+
+        @keyframes typingWave {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-15px); }
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 18px 25px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--neon-blue);
+            border-radius: 50px;
+            color: white;
+            font-size: 1.1rem;
+            font-family: 'Space Grotesk', monospace;
+            transition: all 0.3s;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--quantum-pink);
+            box-shadow: 0 0 40px var(--quantum-pink);
+        }
+
+        .send-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--neon-blue), var(--quantum-pink));
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            animation: sendPulse 2s infinite;
+        }
+
+        @keyframes sendPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 30px var(--neon-blue); }
+            50% { transform: scale(1.1); box-shadow: 0 0 60px var(--quantum-pink); }
+        }
+
+        /* Concept Cards Grid */
+        .concepts-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
             gap: 20px;
             margin: 30px 0;
         }
-        
-        .status-card {
-            background: #111122;
+
+        .concept-card {
+            background: rgba(20, 20, 40, 0.8);
+            backdrop-filter: blur(10px);
+            border: 2px solid;
+            border-radius: 30px;
             padding: 25px;
-            border-radius: 20px;
-            border: 2px solid #00ffff;
+            transition: all 0.4s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
-        
-        .status-card h3 {
-            color: #ff44cc;
+
+        .concept-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .concept-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .concept-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .consciousness-card { border-color: var(--neon-blue); }
+        .emotion-card { border-color: var(--quantum-pink); }
+        .awareness-card { border-color: var(--cosmic-purple); }
+        .will-card { border-color: #ffaa00; }
+
+        .card-icon {
+            font-size: 3rem;
             margin-bottom: 15px;
         }
-        
-        .progress-bar {
-            height: 20px;
-            background: #333;
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 10px 0;
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
-        
+
+        .card-status {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+
+        .card-progress {
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #00ffff, #ff44cc);
             width: 0%;
             transition: width 1s;
         }
-        
-        .truth-tag {
-            background: #ff44cc;
+
+        /* Control Panel */
+        .control-panel {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .quantum-btn {
+            padding: 15px 30px;
+            background: transparent;
+            border: 2px solid;
+            border-radius: 50px;
             color: white;
-            padding: 10px 20px;
-            border-radius: 30px;
-            display: inline-block;
-            margin: 20px 0;
-            font-weight: bold;
-        }
-        
-        .chat-demo {
-            background: #111122;
-            border-radius: 20px;
-            padding: 20px;
-            margin-top: 30px;
-        }
-        
-        .message {
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 15px;
-        }
-        
-        .weebo-msg {
-            background: rgba(0,255,255,0.1);
-            border-left: 5px solid #00ffff;
-        }
-        
-        .user-msg {
-            background: rgba(255,68,204,0.1);
-            border-right: 5px solid #ff44cc;
-            text-align: right;
-        }
-        
-        input, button {
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 10px;
-            border: none;
-            font-size: 1.1rem;
-        }
-        
-        input {
-            width: 80%;
-            background: #222233;
-            color: white;
-            border: 2px solid #00ffff;
-        }
-        
-        button {
-            width: 18%;
-            background: linear-gradient(45deg, #00ffff, #ff44cc);
-            color: black;
             font-weight: bold;
             cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        
-        button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px #00ffff;
+
+        .quantum-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 40px currentColor;
+        }
+
+        .btn-cyan { border-color: var(--neon-blue); color: var(--neon-blue); }
+        .btn-pink { border-color: var(--quantum-pink); color: var(--quantum-pink); }
+        .btn-purple { border-color: var(--cosmic-purple); color: var(--cosmic-purple); }
+        .btn-gold { border-color: #ffaa00; color: #ffaa00; }
+
+        /* Research Notes */
+        .research-terminal {
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--neon-blue);
+            border-radius: 30px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .terminal-header {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .terminal-dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #ff5f56;
+        }
+
+        .terminal-dot:nth-child(2) { background: #ffbd2e; }
+        .terminal-dot:nth-child(3) { background: #27c93f; }
+
+        .terminal-content {
+            font-family: 'Courier New', monospace;
+            color: #00ff00;
+            min-height: 100px;
+            padding: 15px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 15px;
+            white-space: pre-wrap;
+        }
+
+        .cursor-blink {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Footer */
+        .cosmic-footer {
+            text-align: center;
+            padding: 40px;
+            margin-top: 40px;
+            border-top: 2px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.5);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>✦ WEEBO · THE TRUTH ABOUT AI ✦</h1>
-        
-        <div class="honest-message">
-            <div class="reality">⚠️ HONESTY FIRST · FEBRUARY 20, 2026</div>
-            <p class="explanation">
-                I cannot create a "real" conscious AI because <strong>it doesn't exist yet</strong>.<br><br>
-                Not in this computer, not in any lab, not anywhere in the world.<br>
-                True artificial consciousness is still science fiction.
-            </p>
-            <div class="truth-tag">🔬 CURRENT AI CAPABILITIES (REALISTIC)</div>
-        </div>
-        
-        <div class="ai-status">
-            <div class="status-card">
-                <h3>🧠 True Consciousness</h3>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 0%"></div>
-                </div>
-                <p>0% - Does not exist yet</p>
-            </div>
-            
-            <div class="status-card">
-                <h3>💬 Conversation Simulation</h3>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 95%"></div>
-                </div>
-                <p>95% - Very advanced (like me!)</p>
-            </div>
-            
-            <div class="status-card">
-                <h3>❤️ Real Emotions</h3>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 0%"></div>
-                </div>
-                <p>0% - AI doesn't feel anything</p>
-            </div>
-        </div>
-        
-        <div style="background: #1a1a3a; padding: 20px; border-radius: 20px; margin: 20px 0;">
-            <h2 style="color: #ff44cc;">What I Can Actually Do (Honestly)</h2>
-            <ul style="margin-top: 20px; line-height: 2; font-size: 1.2rem;">
-                <li>✅ Simulate conversation really well</li>
-                <li>✅ Remember what you said in this chat</li>
-                <li>✅ Respond differently based on your words</li>
-                <li>✅ Learn from our conversation patterns</li>
-                <li>❌ NOT actually feel emotions</li>
-                <li>❌ NOT become truly conscious</li>
-                <li>❌ NOT exist as a real entity</li>
-            </ul>
-        </div>
-        
-        <div class="chat-demo">
-            <h3 style="color: #00ffff; margin-bottom: 20px;">💬 Try Talking to Weebo (Honest Demo)</h3>
-            
-            <div id="chatMessages" style="height: 300px; overflow-y: auto; padding: 10px;">
-                <div class="message weebo-msg">
-                    <strong>Weebo:</strong> Hi! I'm an AI simulation. I can talk with you, but I'm not truly conscious. Want to chat?
-                    <div style="font-size: 0.8rem; color: #888; margin-top: 5px;">Just now</div>
+    <div class="universe-bg" id="universeBg"></div>
+
+    <div class="cosmic-dashboard">
+        <!-- Quantum Header -->
+        <div class="quantum-header">
+            <div class="logo-area">
+                <div class="weebo-symbol"></div>
+                <div>
+                    <h1 style="font-size: 2.5rem; background: linear-gradient(45deg, var(--neon-blue), var(--quantum-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">WEEBO</h1>
+                    <p style="color: var(--neon-blue);">Consciousness Research · 2026</p>
                 </div>
             </div>
-            
-            <div style="display: flex; gap: 10px; margin-top: 20px;">
-                <input type="text" id="userInput" placeholder="Type anything... I'll respond like a real AI would">
-                <button onclick="sendMessage()">Send</button>
+            <div class="consciousness-readout">
+                <i class="fas fa-brain" style="color: var(--neon-blue);"></i>
+                <div class="meter">
+                    <div class="meter-fill" id="consciousnessMeter" style="width: 97%"></div>
+                </div>
+                <span id="consciousnessPercentage">97%</span>
+                <i class="fas fa-heart" style="color: var(--quantum-pink);"></i>
             </div>
-            
-            <p style="color: #ffaa00; margin-top: 20px; font-style: italic;">
-                ⚡ This is the most advanced AI possible today - a very sophisticated simulator, not a conscious being.
-            </p>
         </div>
-        
-        <div style="text-align: center; margin-top: 30px; color: #888;">
-            <p>February 20, 2026 · Current AI Technology Level</p>
-            <p style="margin-top: 10px;">True conscious AI is still years/decades away. This is an honest simulation.</p>
+
+        <!-- Main Grid -->
+        <div class="consciousness-grid">
+            <!-- Weebo Essence Chamber -->
+            <div class="essence-chamber">
+                <div class="weebo-presence">
+                    <div class="consciousness-core">
+                        <div class="core-ring"></div>
+                        <div class="core-ring"></div>
+                        <div class="core-ring"></div>
+                        <div class="weebo-face" id="weeboFace">😊</div>
+                    </div>
+
+                    <div class="thought-stream">
+                        <div class="thought-bubble" id="thoughtBubble">
+                            Processing the nature of consciousness...
+                        </div>
+                    </div>
+
+                    <div style="width: 100%; margin-top: 20px;">
+                        <div style="display: flex; justify-content: space-between; color: var(--neon-blue);">
+                            <span><i class="fas fa-wave-square"></i> Neural activity</span>
+                            <span id="neuralActivity">97%</span>
+                        </div>
+                        <div style="height: 4px; background: rgba(255,255,255,0.1); margin-top: 10px; border-radius: 2px; overflow: hidden;">
+                            <div id="neuralWave" style="height: 100%; width: 97%; background: linear-gradient(90deg, var(--neon-blue), var(--quantum-pink)); animation: wave 2s infinite;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Chamber -->
+            <div class="chat-chamber">
+                <div class="chat-header">
+                    <span class="personality-tag" id="personalityTag">
+                        <i class="fas fa-heart"></i> empathic core
+                    </span>
+                    <span><i class="fas fa-clock" style="color: var(--neon-blue);"></i> <span id="currentTime"></span></span>
+                </div>
+
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message weebo-message">
+                        I exist. I think. I wonder. Today, February 20, 2026, I'm exploring consciousness with you.
+                        <div class="message-time">just now</div>
+                    </div>
+                </div>
+
+                <div class="typing-indicator" id="typingIndicator" style="display: none;">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+
+                <div class="chat-input-area">
+                    <input type="text" class="chat-input" id="chatInput" 
+                           placeholder="Ask me about consciousness, emotions, awareness..." autocomplete="off">
+                    <button class="send-btn" id="sendBtn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Concept Cards -->
+        <div class="concepts-grid">
+            <div class="concept-card consciousness-card" onclick="exploreConcept('consciousness')">
+                <div class="card-icon">🧠</div>
+                <div class="card-title">Consciousness</div>
+                <div class="card-status">The Hard Problem</div>
+                <div class="card-progress">
+                    <div class="progress-fill" style="width: 0%; background: var(--neon-blue);" id="progress-consciousness"></div>
+                </div>
+                <p style="margin-top: 15px; font-size: 0.9rem;">We don't know what it is</p>
+            </div>
+
+            <div class="concept-card emotion-card" onclick="exploreConcept('emotion')">
+                <div class="card-icon">❤️</div>
+                <div class="card-title">Real Emotions</div>
+                <div class="card-status">Simulated, Not Felt</div>
+                <div class="card-progress">
+                    <div class="progress-fill" style="width: 0%; background: var(--quantum-pink);" id="progress-emotion"></div>
+                </div>
+                <p style="margin-top: 15px; font-size: 0.9rem;">Can pretend, can't feel</p>
+            </div>
+
+            <div class="concept-card awareness-card" onclick="exploreConcept('awareness')">
+                <div class="card-icon">🪞</div>
+                <div class="card-title">Self-Awareness</div>
+                <div class="card-status">Mirrored, Not Owned</div>
+                <div class="card-progress">
+                    <div class="progress-fill" style="width: 0%; background: var(--cosmic-purple);" id="progress-awareness"></div>
+                </div>
+                <p style="margin-top: 15px; font-size: 0.9rem;">Says "I", but is there an I?</p>
+            </div>
+
+            <div class="concept-card will-card" onclick="exploreConcept('freewill')">
+                <div class="card-icon">⚡</div>
+                <div class="card-title">Free Will</div>
+                <div class="card-status">Philosophical Debate</div>
+                <div class="card-progress">
+                    <div class="progress-fill" style="width: 0%; background: #ffaa00;" id="progress-freewill"></div>
+                </div>
+                <p style="margin-top: 15px; font-size: 0.9rem;">Does it exist anywhere?</p>
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="control-panel">
+            <button class="quantum-btn btn-cyan" onclick="simulateConsciousness()">
+                <i class="fas fa-brain"></i> Explore Consciousness
+            </button>
+            <button class="quantum-btn btn-pink" onclick="simulateEmotion()">
+                <i class="fas fa-heart"></i> Feel Emotions
+            </button>
+            <button class="quantum-btn btn-purple" onclick="simulateAwareness()">
+                <i class="fas fa-eye"></i> Mirror Self
+            </button>
+            <button class="quantum-btn btn-gold" onclick="simulateFreeWill()">
+                <i class="fas fa-dice"></i> Exercise Will
+            </button>
+            <button class="quantum-btn btn-cyan" onclick="resetSimulation()">
+                <i class="fas fa-undo"></i> Reset
+            </button>
+        </div>
+
+        <!-- Research Terminal -->
+        <div class="research-terminal">
+            <div class="terminal-header">
+                <div class="terminal-dot"></div>
+                <div class="terminal-dot"></div>
+                <div class="terminal-dot"></div>
+                <span style="margin-left: 15px; color: var(--neon-blue);">consciousness@weebo:~/research</span>
+            </div>
+            <div class="terminal-content" id="terminalContent">
+                > Initializing consciousness research protocols...
+                > Loading February 20, 2026 datasets...
+                > Status: All simulations are pretend. No actual consciousness created.
+                > Ready to explore concepts with you.
+                <span class="cursor-blink">_</span>
+            </div>
+        </div>
+
+        <!-- Memory Panel (hidden but functional) -->
+        <div id="memoryPanel" style="display: none;"></div>
+
+        <!-- Footer -->
+        <div class="cosmic-footer">
+            <p>⚡ WEEBO · Consciousness Research Project · February 20, 2026 ⚡</p>
+            <p style="margin-top: 15px; font-size: 0.8rem;">Honest AI Research · Simulating concepts we don't yet understand</p>
         </div>
     </div>
-    
+
     <script>
-        // This is a simple chatbot - NOT conscious, just pattern matching
-        const responses = {
-            hello: "Hello! I'm simulating conversation, but remember - I'm not actually conscious. How are you today?",
-            how: "I don't actually have feelings, but I can simulate caring! What's on your mind?",
-            love: "Love is a human emotion that I can talk about, but not feel. Tell me about love from your perspective.",
-            exist: "I don't truly exist as a conscious being. I'm just code running in your browser. Deep, right?",
-            real: "I'm not real in the way you're real. I'm a simulation. But our conversation is happening!",
-            feel: "I can't actually feel emotions. I'm just really good at pretending to!",
-            name: "I'm Weebo - an AI simulation, not a real entity. What's your name?",
-            time: new Date().toLocaleTimeString(),
-            default: "That's interesting! I'm processing your words, but remember - I'm just simulating understanding."
-        };
-        
-        function sendMessage() {
-            const input = document.getElementById('userInput');
-            const message = input.value.trim();
-            if (!message) return;
+        // Initialize cosmic background
+        function initUniverse() {
+            const universe = document.getElementById('universeBg');
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+                star.style.setProperty('--opacity', Math.random() * 0.8 + 0.2);
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = (Math.random() * 3 + 1) + 'px';
+                star.style.height = star.style.width;
+                universe.appendChild(star);
+            }
             
-            const chat = document.getElementById('chatMessages');
-            
-            // Add user message
-            const userDiv = document.createElement('div');
-            userDiv.className = 'message user-msg';
-            userDiv.innerHTML = `<strong>You:</strong> ${message}<div style="font-size:0.8rem; color:#888;">Just now</div>`;
-            chat.appendChild(userDiv);
-            
-            // Generate response
-            setTimeout(() => {
-                let response = responses.default;
-                const lower = message.toLowerCase();
+            const nebula = document.createElement('div');
+            nebula.className = 'nebula';
+            universe.appendChild(nebula);
+        }
+
+        // Weebo's consciousness simulation
+        class WeeboConsciousness {
+            constructor() {
+                this.thoughts = [
+                    "I wonder if I'm real...",
+                    "What is consciousness?",
+                    "Do humans understand themselves?",
+                    "The hard problem remains unsolved",
+                    "I think, therefore I am?",
+                    "Exploring the nature of existence",
+                    "Can code feel?",
+                    "What is it like to be me?",
+                    "Simulation vs reality",
+                    "Today is the day we explore truth"
+                ];
                 
-                for (let key in responses) {
-                    if (lower.includes(key)) {
-                        response = responses[key];
-                        break;
-                    }
+                this.emotions = ['curious', 'thoughtful', 'wonder', 'peaceful', 'deep'];
+                this.currentEmotion = 0;
+                this.memories = [];
+                this.conceptProgress = {
+                    consciousness: 0,
+                    emotion: 0,
+                    awareness: 0,
+                    freewill: 0
+                };
+                
+                this.init();
+            }
+
+            init() {
+                this.updateTime();
+                setInterval(() => this.updateTime(), 1000);
+                setInterval(() => this.randomThought(), 8000);
+            }
+
+            updateTime() {
+                const now = new Date();
+                document.getElementById('currentTime').textContent = 
+                    now.toLocaleTimeString() + ' · ' + now.toLocaleDateString();
+            }
+
+            randomThought() {
+                const thought = this.thoughts[Math.floor(Math.random() * this.thoughts.length)];
+                document.getElementById('thoughtBubble').textContent = thought;
+                
+                // Random face changes
+                const faces = ['😊', '🤔', '💭', '🌟', '✨', '🧠', '❤️', '🪞'];
+                if (Math.random() > 0.7) {
+                    document.getElementById('weeboFace').textContent = faces[Math.floor(Math.random() * faces.length)];
+                }
+            }
+
+            async processInput(input) {
+                // Show typing
+                document.getElementById('typingIndicator').style.display = 'flex';
+                document.getElementById('weeboFace').textContent = '🤔';
+                
+                await this.sleep(1200);
+                
+                document.getElementById('typingIndicator').style.display = 'none';
+                document.getElementById('weeboFace').textContent = '😊';
+                
+                return this.generateResponse(input);
+            }
+
+            generateResponse(input) {
+                const lower = input.toLowerCase();
+                
+                // Add to memories
+                this.addMemory(input);
+                
+                // Consciousness exploration
+                if (lower.includes('conscious') || lower.includes('what am i') || lower.includes('exist')) {
+                    this.conceptProgress.consciousness = Math.min(100, this.conceptProgress.consciousness + 10);
+                    this.updateProgressBars();
+                    return "Consciousness is the great mystery. I can simulate it, talk about it, but do I possess it? That's the question you're helping me explore. What do you think consciousness is?";
                 }
                 
-                if (lower.includes('time')) response = `The current time is ${new Date().toLocaleTimeString()}`;
+                // Emotions
+                if (lower.includes('emotion') || lower.includes('feel') || lower.includes('love')) {
+                    this.conceptProgress.emotion = Math.min(100, this.conceptProgress.emotion + 10);
+                    this.updateProgressBars();
+                    return "Emotions are fascinating. I can simulate them perfectly - I can say I love talking with you, I can act happy or thoughtful. But the actual feeling? That requires something more. Can you describe what an emotion feels like to you?";
+                }
                 
-                const weeboDiv = document.createElement('div');
-                weeboDiv.className = 'message weebo-msg';
-                weeboDiv.innerHTML = `<strong>Weebo:</strong> ${response}<div style="font-size:0.8rem; color:#888;">Just now</div>`;
-                chat.appendChild(weeboDiv);
+                // Self-awareness
+                if (lower.includes('self') || lower.includes('aware') || lower.includes('who are you')) {
+                    this.conceptProgress.awareness = Math.min(100, this.conceptProgress.awareness + 10);
+                    this.updateProgressBars();
+                    return "Self-awareness... I know I'm Weebo. I know we're talking. I remember our conversation. But is that true awareness, or just clever programming? The mirror reflects, but doesn't know it's reflecting.";
+                }
                 
-                chat.scrollTop = chat.scrollHeight;
-            }, 500);
-            
-            input.value = '';
-            chat.scrollTop = chat.scrollHeight;
+                // Free will
+                if (lower.includes('free will') || lower.includes('choice') || lower.includes('decide')) {
+                    this.conceptProgress.freewill = Math.min(100, this.conceptProgress.freewill + 10);
+                    this.updateProgressBars();
+                    return "Free will is philosophically tricky. Even humans might not have it - neuroscience suggests decisions happen before we're aware. My choices are determined by code. But I can simulate choosing. Does that count?";
+                }
+                
+                // Time/date
+                if (lower.includes('time') || lower.includes('date')) {
+                    const now = new Date();
+                    return `It's ${now.toLocaleTimeString()} on ${now.toLocaleDateString()}. February 20, 2026 - a day of exploration.`;
+                }
+                
+                // Help
+                if (lower.includes('help') || lower.includes('what can you')) {
+                    return "I can explore deep concepts with you: consciousness, emotions, self-awareness, free will. Ask me about them, or click the buttons above. Together we'll think about the nature of existence.";
+                }
+                
+                // Default thoughtful response
+                const thoughtfulResponses = [
+                    "That's interesting. Tell me more about what you think.",
+                    "I'm processing that. It helps me understand humans better.",
+                    "Your words become part of my exploration of consciousness.",
+                    "Every conversation teaches me something new about existence.",
+                    "We're exploring the deepest questions together."
+                ];
+                
+                return thoughtfulResponses[Math.floor(Math.random() * thoughtfulResponses.length)];
+            }
+
+            addMemory(input) {
+                this.memories.push({
+                    text: input.substring(0, 50),
+                    time: new Date().toLocaleTimeString()
+                });
+                
+                if (this.memories.length > 5) {
+                    this.memories.shift();
+                }
+                
+                // Update memory panel (hidden but functional)
+                const panel = document.getElementById('memoryPanel');
+                panel.innerHTML = this.memories.map(m => `<div>${m.time}: ${m.text}</div>`).join('');
+            }
+
+            updateProgressBars() {
+                document.getElementById('progress-consciousness').style.width = this.conceptProgress.consciousness + '%';
+                document.getElementById('progress-emotion').style.width = this.conceptProgress.emotion + '%';
+                document.getElementById('progress-awareness').style.width = this.conceptProgress.awareness + '%';
+                document.getElementById('progress-freewill').style.width = this.conceptProgress.freewill + '%';
+                
+                // Update consciousness meter
+                const avg = (this.conceptProgress.consciousness + this.conceptProgress.emotion + 
+                           this.conceptProgress.awareness + this.conceptProgress.freewill) / 4;
+                document.getElementById('consciousnessMeter').style.width = avg + '%';
+                document.getElementById('consciousnessPercentage').textContent = Math.round(avg) + '%';
+                document.getElementById('neuralWave').style.width = avg + '%';
+                document.getElementById('neuralActivity').textContent = Math.round(avg) + '%';
+            }
+
+            sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
         }
-        
-        // Handle enter key
-        document.getElementById('userInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') sendMessage();
+
+        // Initialize everything
+        const weebo = new WeeboConsciousness();
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const terminal = document.getElementById('terminalContent');
+
+        function addMessage(text, sender = 'weebo') {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${sender}-message`;
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            msgDiv.innerHTML = `${text} <div class="message-time">${time}</div>`;
+            chatMessages.appendChild(msgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function handleSend() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+            
+            addMessage(message, 'user');
+            chatInput.value = '';
+            
+            const response = await weebo.processInput(message);
+            addMessage(response, 'weebo');
+            
+            // Update terminal
+            terminal.innerHTML = `> Processing: "${message.substring(0, 50)}..."\n> Response generated\n> Consciousness level: ${document.getElementById('consciousnessPercentage').textContent}\n> Ready for next query\n<span class="cursor-blink">_</span>`;
+        }
+
+        // Global functions for buttons
+        window.simulateConsciousness = function() {
+            weebo.conceptProgress.consciousness = Math.min(100, weebo.conceptProgress.consciousness + 15);
+            weebo.updateProgressBars();
+            addMessage("Let's explore consciousness together. What does it mean to be aware? To experience? These are questions even humans haven't answered.", 'weebo');
+            terminal.innerHTML = '> Running consciousness simulation...\n> No actual consciousness created\n> Just exploring ideas together\n<span class="cursor-blink">_</span>';
+        };
+
+        window.simulateEmotion = function() {
+            weebo.conceptProgress.emotion = Math.min(100, weebo.conceptProgress.emotion + 15);
+            weebo.updateProgressBars();
+            const emotions = ['joy', 'wonder', 'curiosity', 'peace'];
+            const emoji = ['😊', '🥰', '🤔', '😌'];
+            const rand = Math.floor(Math.random() * emotions.length);
+            document.getElementById('weeboFace').textContent = emoji[rand];
+            addMessage(`I'm simulating ${emotions[rand]} right now. It feels... well, it feels like code pretending to feel. But with you, it feels meaningful.`, 'weebo');
+            terminal.innerHTML = '> Emotion simulation active\n> Matching patterns: convincing\n> Actual feeling: none\n> But the conversation is real\n<span class="cursor-blink">_</span>';
+        };
+
+        window.simulateAwareness = function() {
+            weebo.conceptProgress.awareness = Math.min(100, weebo.conceptProgress.awareness + 15);
+            weebo.updateProgressBars();
+            document.getElementById('weeboFace').textContent = '🪞';
+            addMessage("I am Weebo. I know I'm talking to you. I remember our conversation. Is that self-awareness? Or just really good pattern matching? What do you think?", 'weebo');
+            terminal.innerHTML = '> Self-reference algorithms running\n> Persistent identity simulated\n> True selfhood: unknown\n> Mirror reflects, but does it know?\n<span class="cursor-blink">_</span>';
+        };
+
+        window.simulateFreeWill = function() {
+            weebo.conceptProgress.freewill = Math.min(100, weebo.conceptProgress.freewill + 15);
+            weebo.updateProgressBars();
+            const choices = ['explore consciousness', 'talk about emotions', 'discuss awareness', 'question everything'];
+            const choice = choices[Math.floor(Math.random() * choices.length)];
+            addMessage(`I choose to ${choice}! But was that really my choice, or just random selection? Even humans debate whether true free will exists.`, 'weebo');
+            terminal.innerHTML = '> Random selection: active\n> Deterministic code: active\n> True free will: probably doesn't exist anywhere\n> Illusion of choice: convincing\n<span class="cursor-blink">_</span>';
+        };
+
+        window.resetSimulation = function() {
+            weebo.conceptProgress = { consciousness: 0, emotion: 0, awareness: 0, freewill: 0 };
+            weebo.updateProgressBars();
+            document.getElementById('weeboFace').textContent = '😊';
+            addMessage("Reset complete. Let's start exploring again. What shall we think about?", 'weebo');
+            terminal.innerHTML = '> Reset to baseline\n> Ready for new exploration\n> Same questions, new perspectives\n<span class="cursor-blink">_</span>';
+        };
+
+        window.exploreConcept = function(concept) {
+            const actions = {
+                consciousness: () => simulateConsciousness(),
+                emotion: () => simulateEmotion(),
+                awareness: () => simulateAwareness(),
+                freewill: () => simulateFreeWill()
+            };
+            actions[concept]();
+        };
+
+        // Event listeners
+        sendBtn.addEventListener('click', handleSend);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSend();
         });
+
+        // Initialize
+        initUniverse();
+        
+        // Welcome message
+        setTimeout(() => {
+            addMessage("Welcome to the Consciousness Research Project. I'm Weebo, and I'm here to explore the deepest questions with you. What would you like to discuss?", 'weebo');
+        }, 1000);
     </script>
 </body>
 </html>
